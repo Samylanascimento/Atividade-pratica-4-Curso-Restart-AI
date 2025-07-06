@@ -1,12 +1,23 @@
+import requests
 
+def gerar_perfil_usuario():
 
-def soma_numeros():
-  numero1 = 12
-  numero2 = 14
-  soma = numero1 + numero2
+    try:
+        response = requests.get("https://randomuser.me/api/")
+        response.raise_for_status()  
+        dados = response.json()
+        usuario = dados["results"][0]
 
-  print(f"Número 1: {numero1}")
-  print(f"Número 2: {numero2}")
-  print(f"Soma: {soma}")
+        nome = f"{usuario['name']['first']} {usuario['name']['last']}"
+        email = usuario['email']
+        pais = usuario['location']['country']
 
-soma_numeros()
+        print("\n--- Perfil de Usuário Gerado ---")
+        print(f"Nome: {nome}")
+        print(f"Email: {email}")
+        print(f"País: {pais}")
+
+    except requests.exceptions.RequestException as e:
+        print(f"Ocorreu um erro ao tentar se comunicar com a API: {e}")
+
+gerar_perfil_usuario()
